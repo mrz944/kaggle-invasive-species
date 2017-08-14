@@ -46,5 +46,5 @@ print('Model loaded.')
 
 preds = model.predict_generator(test_generator, steps=test_samples)
 preds_csv = pd.DataFrame({ 'name': range(1, test_samples),
-                       'invasive': preds})
+                       'invasive': preds[0]})
 preds_csv[['name', 'invasive']].to_csv('./submission.csv', index=None)
