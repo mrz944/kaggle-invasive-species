@@ -55,7 +55,7 @@ print('Model loaded.')
 x = base_model.output
 x = GlobalAveragePooling2D()(x)
 x = Dense(2048, activation='relu')(x)
-# x = Dropout(0.8)(x)
+x = Dropout(0.7)(x)
 predictions = Dense(1, activation='sigmoid')(x)
 model = Model(inputs=base_model.input, outputs=predictions)
 
@@ -76,9 +76,7 @@ for layer in model.layers:
 
 model.compile(
     loss='binary_crossentropy',
-    optimizer=optimizers.SGD(lr=0.00001,
-                             momentum=0.9,
-                             decay=0.00004),
+    optimizer=optimizers.RMSprop(lr=0.0001, decay=0.00004),
     metrics=['accuracy'])
 
 csv_logger = CSVLogger('./output/logs/fine_tuning_3.csv', separator=';')
