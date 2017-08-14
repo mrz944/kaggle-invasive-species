@@ -40,11 +40,16 @@ test_generator = ImageDataGenerator().flow_from_directory(
 #                              decay=0.00004),
 #     metrics=['accuracy'])
 
-model = load_model('./output/checkpoints/inceptionV3_fine_tuned_2_epoch_00_acc_0.97321.h5')
+model = load_model('./output/checkpoints/inceptionV3_fine_tuned_2_epoch_86_acc_0.98661.h5')
 
 print('Model loaded.')
 
 preds = model.predict_generator(test_generator, steps=test_samples)
-preds_csv = pd.DataFrame({ 'name': range(1, test_samples),
-                       'invasive': preds[0]})
+
+results = []
+for i in range(test_samples):
+    results.append(preds[i][0])
+
+preds_csv = pd.DataFrame({'name': range(1, test_samples+1),
+                          'invasive': results})
 preds_csv[['name', 'invasive']].to_csv('./submission.csv', index=None)
