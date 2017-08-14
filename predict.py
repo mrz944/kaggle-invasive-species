@@ -7,7 +7,7 @@ import pandas as pd
 
 # Settings
 
-test_directory = './test'
+test_directory = './data/test'
 
 img_width, img_height = 299, 299
 test_samples = 1531
