@@ -1,7 +1,7 @@
 from keras import applications
 from keras.preprocessing.image import ImageDataGenerator
 from keras import optimizers
-from keras.models import Model
+from keras.models import Model, load_model
 from keras.layers import Dense, Dropout, GlobalAveragePooling2D
 import pandas as pd
 
