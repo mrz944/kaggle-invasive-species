@@ -1,12 +1,12 @@
 from keras import applications
 from keras.preprocessing.image import ImageDataGenerator
 from keras import optimizers
-from keras.models import Model, load_model
+from keras.models import Model
 from keras.layers import Dense, Dropout, GlobalAveragePooling2D
 import pandas as pd
+import numpy as np
 
-# Settings
-
+test_set = pd.read_csv('./sample_submission.csv')
 test_directory = './data/test'
 
 img_width, img_height = 299, 299
@@ -22,34 +22,29 @@ test_generator = ImageDataGenerator().flow_from_directory(
 
 # Loading pre-trained model and adding custom layers
 
-# base_model = applications.InceptionV3(weights='imagenet',
-#                                       include_top=False,
-#                                       input_shape=(img_height, img_width, 3))
-# # Custom layers
-# x = base_model.output
-# x = GlobalAveragePooling2D()(x)
-# x = Dense(2048, activation='relu')(x)
-# # x = Dropout(0.8)(x)
-# predictions = Dense(1, activation='sigmoid')(x)
-# model = Model(inputs=base_model.input, outputs=predictions)
-#
-# model.compile(
-#     loss='binary_crossentropy',
-#     optimizer=optimizers.SGD(lr=0.00001,
-#                              momentum=0.9,
-#                              decay=0.00004),
-#     metrics=['accuracy'])
+base_model = applications.InceptionV3(weights='imagenet',
+                                      include_top=False,
+                                      input_shape=(img_height, img_width, 3))
+# Custom layers
+x = base_model.output
+x = GlobalAveragePooling2D()(x)
+x = Dense(2048, activation='relu')(x)
+x = Dropout(0.8)(x)
+predictions = Dense(1, activation='sigmoid')(x)
+model = Model(inputs=base_model.input, outputs=predictions)
 
-model = load_model('./output/checkpoints/inceptionV3_fine_tuned_2_epoch_86_acc_0.98661.h5')
+model.load_weights('./output/checkpoints/inceptionV3_fine_tuned_epoch_60_acc_1.00000.h5')
+
+model.compile(
+    loss='binary_crossentropy',
+    optimizer=optimizers.RMSprop(lr=0.0001, decay=0.00004),
+    metrics=['accuracy'])
 
 print('Model loaded.')
 
-preds = model.predict_generator(test_generator, steps=test_samples)
+preds_test = np.zeros(test_samples, dtype=np.float)
 
-results = []
-for i in range(test_samples):
-    results.append(round(preds[i][0], 3))
+preds_test += model.predict_generator(test_generator, steps=test_samples)[:, 0]
 
-preds_csv = pd.DataFrame({'name': range(1, test_samples+1),
-                          'invasive': results})
-preds_csv[['name', 'invasive']].to_csv('./submission.csv', index=None)
+test_set['invasive'] = preds_test
+test_set.to_csv('./submission.csv', index=None)
