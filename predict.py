@@ -10,7 +10,7 @@ import pandas as pd
 test_directory = './test'
 
 img_width, img_height = 299, 299
-test_samples =
+test_samples = 1531
 
 test_generator = ImageDataGenerator().flow_from_directory(
     test_directory,
