@@ -48,7 +48,7 @@ preds = model.predict_generator(test_generator, steps=test_samples)
 
 results = []
 for i in range(test_samples):
-    results.append(preds[i][0])
+    results.append(round(preds[i][0], 3))
 
 preds_csv = pd.DataFrame({'name': range(1, test_samples+1),
                           'invasive': results})
