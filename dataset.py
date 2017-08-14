@@ -9,10 +9,10 @@ from random import shuffle
 # https://www.kaggle.com/c/invasive-species-monitoring/download/train_labels.csv.zip
 # https://www.kaggle.com/c/invasive-species-monitoring/download/train.7z
 
-VAL_PERCENT = 20
+VAL_PERCENT = 5
 
 train_labels = pd.read_csv('./train_labels.csv', index_col=[0])
-train_paths = glob.glob('./train/train/*.jpg')
+train_paths = glob.glob('./train/*.jpg')
 
 print('Found %d images.') % len(train_paths)
 
@@ -23,7 +23,7 @@ for image in train_paths:
     filename = ntpath.basename(image).split('.')[0]
     image_name = ntpath.basename(image).split('.')[0]
     invasive = train_labels.loc[int(image_name)][0]
-    if invasive == 0:
+    if invasive == 1:
         invasive_images.append(image)
     else:
         non_invasive_images.append(image)
