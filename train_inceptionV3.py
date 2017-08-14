@@ -63,7 +63,7 @@ for layer in base_model.layers:
 
 model.compile(
     loss='binary_crossentropy',
-    optimizer=optimizers.RMSprop(lr=0.01, decay=0.00004),
+    optimizer=optimizers.RMSprop(lr=0.001, decay=0.00004),
     metrics=['accuracy'])
 
 # train the model on the new data for a few epochs
