@@ -1,4 +1,8 @@
-from keras.models import load_model
+from keras import applications
+from keras.preprocessing.image import ImageDataGenerator
+from keras import optimizers
+from keras.models import Model, load_model
+from keras.layers import Dense, Dropout, GlobalAveragePooling2D
 import cv2
 import pandas as pd
 import numpy as np
@@ -18,7 +22,27 @@ for img_path in tqdm(test_set['name'].iloc[:]):
 
 test_img = np.array(test_img, np.float32) / 255
 
-model = load_model('./output/checkpoints/inceptionV3_fine_tuned_2_epoch_86_acc_0.98661.h5')
+base_model = applications.InceptionV3(weights='imagenet',
+                                      include_top=False,
+                                      input_shape=(299, 299, 3))
+# Custom layers
+x = base_model.output
+x = GlobalAveragePooling2D()(x)
+x = Dense(2048, activation='relu')(x)
+x = Dropout(0.8)(x)
+predictions = Dense(1, activation='sigmoid')(x)
+model = Model(inputs=base_model.input, outputs=predictions)
+
+model.load_weights('./output/inceptionV3_fine_tuned_100_epochs.h5')
+
+model.compile(
+    loss='binary_crossentropy',
+    optimizer=optimizers.SGD(lr=0.0001,
+                             momentum=0.9,
+                             decay=0.00004),
+    metrics=['accuracy'])
+
+# model = load_model('./output/checkpoints/inceptionV3_fine_tuned_2_epoch_86_acc_0.98661.h5')
 
 print('Model loaded.')
 
