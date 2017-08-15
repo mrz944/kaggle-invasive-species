@@ -34,23 +34,26 @@ print('Non-inavsive %d') % len(non_invasive_images)
 shuffle(invasive_images)
 shuffle(non_invasive_images)
 
-nb_invasive_val = len(invasive_images) // (100 // VAL_PERCENT)
-nb_non_invasive_val = len(non_invasive_images) // (100 // VAL_PERCENT)
+# nb_invasive_val = len(invasive_images) // (100 // VAL_PERCENT)
+# nb_non_invasive_val = len(non_invasive_images) // (100 // VAL_PERCENT)
+
+nb_invasive_val = 200
+nb_non_invasive_val = 200
 
 # TRAIN DATA
 print('TRAIN DATA:')
 print('Invasive: %d') % (len(invasive_images) - nb_invasive_val)
 print('Non-invasive %d') % (len(non_invasive_images) - nb_non_invasive_val)
 for image in invasive_images[nb_invasive_val:]:
-    shutil.copy2(image, os.path.join('data/train/1'))
+    shutil.copy2(image, os.path.join('data/train/invasive'))
 for image in non_invasive_images[nb_non_invasive_val:]:
-    shutil.copy2(image, os.path.join('data/train/0'))
+    shutil.copy2(image, os.path.join('data/train/non_invasive'))
 
 # VALIDATION DATA
 print('VALIDATION DATA:')
 print('Invasive: %d') % nb_invasive_val
 print('Non-invasive %d') % nb_non_invasive_val
 for image in invasive_images[:nb_invasive_val]:
-    shutil.copy2(image, os.path.join('data/validation/1'))
+    shutil.copy2(image, os.path.join('data/validation/invasive'))
 for image in non_invasive_images[:nb_non_invasive_val]:
-    shutil.copy2(image, os.path.join('data/validation/0'))
+    shutil.copy2(image, os.path.join('data/validation/non_invasive'))
