@@ -4,6 +4,7 @@ from keras import optimizers
 from keras.models import Model
 from keras.layers import Dense, Dropout, GlobalAveragePooling2D
 import pandas as pd
+import ntpath
 # import numpy as np
 
 # check prediction on train data
@@ -54,7 +55,8 @@ for pred in preds:
     else:
         preds_rounded.append("0")
 
-preds_filenames = [int(x.replace("test\\", "").replace(".jpg", "")) for x in test_generator.filenames]
+# files are loaded as 1.jpg, 10.jpg, 100.jpg, 1000.jpg, 1001.jpg, ... !
+preds_filenames = [int(ntpath.basename(x).split('.')[0]) for x in test_generator.filenames]
 
 data = (list(zip(preds_filenames, preds_rounded)))
 
