@@ -12,7 +12,7 @@ validation_directory = './data/validation'
 
 img_width, img_height = 400, 300
 batch_size = 8
-batch_size_val = 400
+batch_size_val = 200
 
 train_epochs = 20
 fine_tune_epochs = 50
@@ -20,7 +20,6 @@ fine_tune_epochs = 50
 # Data generators & augmentation
 datagen = ImageDataGenerator(
     rescale=1.,
-    featurewise_center=True,
     rotation_range=10,
     width_shift_range=.1,
     height_shift_range=.1,
@@ -31,8 +30,7 @@ datagen = ImageDataGenerator(
     fill_mode='reflect')
 
 validgen = ImageDataGenerator(
-    rescale=1.,
-    featurewise_center=True)
+    rescale=1.)
 
 train_generator = datagen.flow_from_directory(
     train_directory,
