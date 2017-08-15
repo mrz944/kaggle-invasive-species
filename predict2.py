@@ -51,9 +51,9 @@ preds_rounded = []
 
 for pred in preds:
     if (pred > .5):
-        preds_rounded.append("1")
-    else:
         preds_rounded.append("0")
+    else:
+        preds_rounded.append("1")
 
 # files are loaded as 1.jpg, 10.jpg, 100.jpg, 1000.jpg, 1001.jpg, ... !
 preds_filenames = [int(ntpath.basename(x).split('.')[0]) for x in test_generator.filenames]
